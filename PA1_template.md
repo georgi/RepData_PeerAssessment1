@@ -50,31 +50,21 @@ We group activity data by interval and calculate the mean stripping NA values.
 
 ```r
 steps_per_interval <- tapply(activity$steps, activity$interval, function(x) mean(x, na.rm = TRUE))
+intervals <- unique(activity$interval)
+plot(intervals, steps_per_interval, type = 'l')
 ```
 
-
-For nicer display let's create a vector containing the hour of day based on the interval. We divide by 12 since it's 12 intervals per hour.
-
-
-```r
-intervals_per_hour <- 12
-hour <- 1:288 / intervals_per_hour
-
-plot(hour, steps_per_interval, type = 'l')
-```
-
-![plot of chunk unnamed-chunk-5](./PA1_template_files/figure-html/unnamed-chunk-5.png) 
+![plot of chunk unnamed-chunk-4](./PA1_template_files/figure-html/unnamed-chunk-4.png) 
 
 Which interval contains the maximum number of steps?
 
 
 ```r
-which.max(steps_per_interval)
+activity[which.max(steps_per_interval),]$interval
 ```
 
 ```
-## 835 
-## 104
+## [1] 835
 ```
 
 
@@ -107,7 +97,7 @@ complete_steps_per_day <- tapply(complete_activity$steps, complete_activity$date
 hist(complete_steps_per_day, breaks = 8)
 ```
 
-![plot of chunk unnamed-chunk-9](./PA1_template_files/figure-html/unnamed-chunk-9.png) 
+![plot of chunk unnamed-chunk-8](./PA1_template_files/figure-html/unnamed-chunk-8.png) 
 
 Apparently the median bucket is now more emphasized whcih is not a surprise because we have more days with the mean number of steps since we created them artificially.
 
@@ -158,16 +148,14 @@ weekday_steps <- tapply(weekday$steps, weekday$interval, function(x) mean(x, na.
 weekend_steps <- tapply(weekend$steps, weekend$interval, function(x) mean(x, na.rm = TRUE))
 ```
 
-
+Now we arrange the two plots above each other using the base plotting system. 
 
 ```r
 par(mfrow=c(2,1), pin=c(4,2))
-plot(hour, weekday_steps, type = 'l')
-title("Weekday")
-plot(hour, weekend_steps, type = 'l')
-title("Weekend")
+plot(intervals, weekday_steps, type = 'l')
+plot(intervals, weekend_steps, type = 'l')
 ```
 
-![plot of chunk unnamed-chunk-14](./PA1_template_files/figure-html/unnamed-chunk-14.png) 
+![plot of chunk unnamed-chunk-13](./PA1_template_files/figure-html/unnamed-chunk-13.png) 
 
 
